@@ -2,6 +2,12 @@
 
 import torch
 import torch.nn as nn
+import os
+
+current_dir = os.path.dirname(os.path.abspath(__file__))
+data_dir = os.path.join(current_dir, "data")
+os.makedirs(data_dir, exist_ok=True)
+
 
 # Set device and seed
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -37,4 +43,4 @@ for i, layer in enumerate(model):
         save_dict[f"layer{i}_bias_grad"] = layer.bias.grad
 
 # Save everything to one file
-torch.save(save_dict, "data/baseline.pt")
+torch.save(save_dict, os.path.join(data_dir, "baseline.pt"))
