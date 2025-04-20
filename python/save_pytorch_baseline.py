@@ -1,13 +1,12 @@
-# save_pytorch_baseline.py
-
 import torch
 import torch.nn as nn
 import os
 
+# Get parent directory of the current script
 current_dir = os.path.dirname(os.path.abspath(__file__))
-data_dir = os.path.join(current_dir, "data")
+parent_dir = os.path.dirname(current_dir)
+data_dir = os.path.join(parent_dir, "data")
 os.makedirs(data_dir, exist_ok=True)
-
 
 # Set device and seed
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -31,7 +30,6 @@ loss = criterion(out, target)
 loss.backward()
 
 # Save everything
-# Save all tensors in a single dictionary
 save_dict = {"input": x, "target": target, "output": out, "loss": loss}
 
 # Save model weights and gradients
@@ -42,5 +40,5 @@ for i, layer in enumerate(model):
         save_dict[f"layer{i}_weight_grad"] = layer.weight.grad
         save_dict[f"layer{i}_bias_grad"] = layer.bias.grad
 
-# Save everything to one file
+# Save to baseline.pt in ../data
 torch.save(save_dict, os.path.join(data_dir, "baseline.pt"))
