@@ -14,3 +14,10 @@ __global__ void linear_forward(float* input, float* weight, float* bias, float* 
         output[row * out_features + col] = sum + bias[col];
     }
 }
+
+__global__ void relu_forward(float* input, float* output, int size) {
+    int idx = threadIdx.x + blockIdx.x * blockDim.x;
+    if (idx < size) {
+        output[idx] = fmaxf(0.0f, input[idx]);
+    }
+}
