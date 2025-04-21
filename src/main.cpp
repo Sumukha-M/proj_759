@@ -1,12 +1,13 @@
 #include <iostream>
-#include <vector>
+#include <torch/torch.h>
+#include <torch/script.h>
 #include <cuda_runtime.h>
 
 extern void launch_linear_forward(float* input, float* weight, float* bias, float* output,
                                   int batch_size, int in_features, int out_features);
 extern void launch_relu_forward(float* input, float* output, int size);
 
-// Helper for error checking
+// Error checking
 #define cudaCheckError(ans) { gpuAssert((ans), __FILE__, __LINE__); }
 inline void gpuAssert(cudaError_t code, const char *file, int line) {
     if (code != cudaSuccess)
@@ -14,52 +15,59 @@ inline void gpuAssert(cudaError_t code, const char *file, int line) {
 }
 
 int main() {
-    int batch_size = 2;
-    int in_features = 4;
-    int out_features = 3;
+    // -------------------- Load baseline.pt --------------------
+    torch::NoGradGuard no_grad;
 
-    float h_input[]  = {1, 2, 3, 4, 5, 6, 7, 8};  // shape: [2 x 4]
-    float h_weight[] = {1, 1, 1, 1,   // neuron 1
-                        0, 0, 1, 0,   // neuron 2
-                        1, 0, 0, 0};  // neuron 3
-    float h_bias[]   = {1, 2, 3};     // shape: [3]
-    float h_output[6];                // shape: [2 x 3]
+    // Load as IValue instead of Module
+    torch::IValue obj;
+    torch::load(obj, "data/baseline.pt");
 
-    // Allocate device memory
-    float *d_input, *d_weight, *d_bias, *d_output;
-    cudaMalloc(&d_input, sizeof(h_input));
-    cudaMalloc(&d_weight, sizeof(h_weight));
-    cudaMalloc(&d_bias, sizeof(h_bias));
-    cudaMalloc(&d_output, sizeof(h_output));
+    // Convert to generic dict
+    auto data = obj.toGenericDict();
 
-    // Copy to device
-    cudaMemcpy(d_input, h_input, sizeof(h_input), cudaMemcpyHostToDevice);
-    cudaMemcpy(d_weight, h_weight, sizeof(h_weight), cudaMemcpyHostToDevice);
-    cudaMemcpy(d_bias, h_bias, sizeof(h_bias), cudaMemcpyHostToDevice);
+    torch::Tensor input     = data.at("input").toTensor().contiguous();
+    torch::Tensor weight    = data.at("layer0_weight").toTensor().contiguous();
+    torch::Tensor bias      = data.at("layer0_bias").toTensor().contiguous();
+    torch::Tensor ref_out   = data.at("output").toTensor().contiguous();  // PyTorch output
 
-    // Launch kernel
+    int batch_size = input.size(0);
+    int in_features = input.size(1);
+    int out_features = weight.size(0);
+
+    std::cout << "Loaded input of shape: " << input.sizes() << "\n";
+
+    // -------------------- Allocate and copy to device --------------------
+    float *d_input, *d_weight, *d_bias, *d_output, *d_relu;
+    cudaMalloc(&d_input,  input.numel() * sizeof(float));
+    cudaMalloc(&d_weight, weight.numel() * sizeof(float));
+    cudaMalloc(&d_bias,   bias.numel() * sizeof(float));
+    cudaMalloc(&d_output, batch_size * out_features * sizeof(float));
+    cudaMalloc(&d_relu,   batch_size * out_features * sizeof(float));
+
+    cudaMemcpy(d_input,  input.data_ptr<float>(), input.numel() * sizeof(float), cudaMemcpyHostToDevice);
+    cudaMemcpy(d_weight, weight.data_ptr<float>(), weight.numel() * sizeof(float), cudaMemcpyHostToDevice);
+    cudaMemcpy(d_bias,   bias.data_ptr<float>(), bias.numel() * sizeof(float), cudaMemcpyHostToDevice);
+
+    // -------------------- Run CUDA kernels --------------------
     launch_linear_forward(d_input, d_weight, d_bias, d_output, batch_size, in_features, out_features);
+    launch_relu_forward(d_output, d_relu, batch_size * out_features);
 
-    // Copy back result
-    cudaMemcpy(h_output, d_output, sizeof(h_output), cudaMemcpyDeviceToHost);
-    std::cout << "Linear Output:\n";
-    for (int i = 0; i < 6; ++i) std::cout << h_output[i] << " ";
-    std::cout << "\n";
+    // -------------------- Copy back --------------------
+    std::vector<float> h_output(batch_size * out_features);
+    cudaMemcpy(h_output.data(), d_relu, h_output.size() * sizeof(float), cudaMemcpyDeviceToHost);
 
-    // ReLU
-    float h_relu_out[6];
-    float *d_relu_out;
-    cudaMalloc(&d_relu_out, sizeof(h_output));
-    launch_relu_forward(d_output, d_relu_out, 6);
-    cudaMemcpy(h_relu_out, d_relu_out, sizeof(h_relu_out), cudaMemcpyDeviceToHost);
+    // -------------------- Compare with PyTorch output --------------------
+    auto ref_flat = ref_out.view({-1}).contiguous();
+    auto ref_ptr = ref_flat.data_ptr<float>();
 
-    std::cout << "ReLU Output:\n";
-    for (int i = 0; i < 6; ++i) std::cout << h_relu_out[i] << " ";
-    std::cout << "\n";
+    std::cout << "CUDA Output vs PyTorch Output (first 10 values):\n";
+    for (int i = 0; i < std::min(10, (int)h_output.size()); ++i) {
+        std::cout << "CUDA: " << h_output[i] << " \t PyTorch: " << ref_ptr[i] << "\n";
+    }
 
-    // Free memory
+    // -------------------- Cleanup --------------------
     cudaFree(d_input); cudaFree(d_weight); cudaFree(d_bias);
-    cudaFree(d_output); cudaFree(d_relu_out);
+    cudaFree(d_output); cudaFree(d_relu);
 
     return 0;
 }
