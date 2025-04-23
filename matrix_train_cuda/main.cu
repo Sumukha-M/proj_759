@@ -22,10 +22,12 @@ int main() {
     for (int i = 0; i < N * D; ++i) x[i] = sin(i);
     for (int i = 0; i < D * D; ++i) w[i] = cos(i);
 
-    // Launch forward pass
     dim3 threads(256);
     dim3 blocks((N + 255) / 256);
 
     matmul_forward<<<blocks, threads>>>(x, w, y);
     cudaDeviceSynchronize();
+
+    // Set dummy gradient
+    for (int i = 0; i < N * D; ++i) grad_out[i] = 1.0f;
 }
