@@ -28,6 +28,9 @@ int main() {
     matmul_forward<<<blocks, threads>>>(x, w, y);
     cudaDeviceSynchronize();
 
-    // Set dummy gradient
     for (int i = 0; i < N * D; ++i) grad_out[i] = 1.0f;
+
+    // Launch backward pass
+    matmul_backward<<<(D + 255) / 256, threads>>>(grad_out, x, grad_w);
+    cudaDeviceSynchronize();
 }
