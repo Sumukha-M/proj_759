@@ -30,7 +30,10 @@ int main() {
 
     for (int i = 0; i < N * D; ++i) grad_out[i] = 1.0f;
 
-    // Launch backward pass
     matmul_backward<<<(D + 255) / 256, threads>>>(grad_out, x, grad_w);
+    cudaDeviceSynchronize();
+
+    // Launch update
+    sgd_update<<<(D * D + 255) / 256, threads>>>(w, grad_w, lr);
     cudaDeviceSynchronize();
 }
