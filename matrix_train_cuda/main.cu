@@ -33,7 +33,17 @@ int main() {
     matmul_backward<<<(D + 255) / 256, threads>>>(grad_out, x, grad_w);
     cudaDeviceSynchronize();
 
-    // Launch update
     sgd_update<<<(D * D + 255) / 256, threads>>>(w, grad_w, lr);
     cudaDeviceSynchronize();
+
+    // Completion message and cleanup
+    std::cout << "One training iteration complete." << std::endl;
+
+    cudaFree(x); 
+    cudaFree(w); 
+    cudaFree(y); 
+    cudaFree(grad_out); 
+    cudaFree(grad_w);
+
+    return 0;
 }
