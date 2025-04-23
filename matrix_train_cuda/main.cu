@@ -13,4 +13,11 @@ __global__ void sgd_update(float* w, float* grad_w, float lr);
 int main() {
     float *x, *w, *y, *grad_out, *grad_w;
     float lr = 0.001f;
+
+    // Unified memory allocation
+    cudaMallocManaged(&x, N * D * sizeof(float));
+    cudaMallocManaged(&w, D * D * sizeof(float));
+    cudaMallocManaged(&y, N * D * sizeof(float));
+    cudaMallocManaged(&grad_out, N * D * sizeof(float));
+    cudaMallocManaged(&grad_w, D * D * sizeof(float));
 }
