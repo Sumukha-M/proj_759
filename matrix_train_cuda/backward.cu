@@ -10,7 +10,7 @@ __global__ void matmul_backward(float* grad_out, float* x, float* grad_w) {
         for (int j = 0; j < D; ++j) {
             float sum = 0;
             for (int b = 0; b < N; ++b) {
-                sum += x[b * D + idx];  // Grad output not used yet
+                sum += x[b * D + idx] * grad_out[b * D + j];
             }
             grad_w[idx * D + j] = sum;
         }
