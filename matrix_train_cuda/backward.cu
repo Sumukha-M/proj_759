@@ -6,10 +6,13 @@
 __global__ void matmul_backward(float* grad_out, float* x, float* grad_w) {
     int idx = threadIdx.x + blockIdx.x * blockDim.x;
 
-    // Just a placeholder loop
     if (idx < D) {
         for (int j = 0; j < D; ++j) {
-            grad_w[idx * D + j] = 1.0; // Dummy value
+            float sum = 0;
+            for (int b = 0; b < N; ++b) {
+                sum += x[b * D + idx];  // Grad output not used yet
+            }
+            grad_w[idx * D + j] = sum;
         }
     }
 }
