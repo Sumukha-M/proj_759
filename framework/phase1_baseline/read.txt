@@ -1,0 +1,3 @@
+in x64 native tools command prompt for vs 2022
+nvcc main.cu -o cuda_dnn_baseline
+cuda_dnn_baseline.exe

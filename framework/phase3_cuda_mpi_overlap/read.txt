@@ -1,0 +1,3 @@
+in x64 Native Tools Command Prompt:
+cl /openmp main.cpp /I"C:\Program Files (x86)\Microsoft SDKs\MPI\Include" /link /LIBPATH:"C:\Program Files (x86)\Microsoft SDKs\MPI\Lib\x64" msmpi.lib /out:mpi_overlap_run.exe
+mpiexec -n 2 mpi_overlap_run.exe
