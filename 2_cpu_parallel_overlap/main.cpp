@@ -6,16 +6,9 @@ int main() {
 #pragma omp parallel sections
     {
 #pragma omp section
-        {
-            compute_gradients();
-        }
+        compute_gradients();
+
 #pragma omp section
-        {
-            communicate_gradients();
-        }
-#pragma omp section
-        {
-            communicate_gradients();
-        }
+        communicate_gradients();
     }
 }
