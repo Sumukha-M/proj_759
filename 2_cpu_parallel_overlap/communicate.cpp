@@ -3,7 +3,7 @@
 #include "communicate.h"
 
 void communicate_gradients() {
-    for (int i = 0; i < 7; ++i) {
-        std::cout << "Sending data for layer: " << i << std::endl;
+    for (int i = 0; i < 5; ++i) {
+        std::cout << "Layer " << i << " - Done" << std::endl;
     }
 }
