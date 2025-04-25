@@ -10,6 +10,7 @@ __global__ void matmul_forward(float* x, float* w, float* y) {
     if (idx < N) {
         for (int j = 0; j < D; ++j) {
             y[idx * D + j] = 0;
+            // Compute dot product of idx-th row of x and j-th column of w
             for (int k = 0; k < D; ++k) {
                 y[idx * D + j] += x[idx * D + k] * w[k * D + j];
             }
