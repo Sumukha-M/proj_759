@@ -1,3 +1,9 @@
+//==============================================
+// File: backward.h
+// Desc: Declaration of fake_backward()
+// Simulates gradient calculation
+//==============================================
+
 #ifndef BACKWARD_H
 #define BACKWARD_H
 
