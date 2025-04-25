@@ -3,9 +3,9 @@
 #include "communicate.h"
 
 void communicate_gradients() {
-    int x = 0;
+    std::cout << "Communicating..." << std::endl;
     for (int i = 0; i < 5; ++i) {
-        x = i * 2;
-        std::cout << "Layer multiplied " << x << std::endl;
+        std::cout << "Processing layer " << i << std::endl;
     }
+    std::cout << "Finished communication" << std::endl;
 }
