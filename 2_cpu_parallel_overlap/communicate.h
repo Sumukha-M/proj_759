@@ -1,12 +1,9 @@
-/*******************************************************
- * File: communicate.h
- * Description: 
- *   Header file declaring the communicate_gradients() function.
- *   This function simulates gradient communication (AllReduce) 
- *   using sleep delays for each layer.
- *
- * Part of: Phase 2 - OpenMP Overlap Project
- *******************************************************/
+//==============================================
+// File: communicate.h
+// Description: Declaration of communicate_gradients function.
+// This function simulates AllReduce communication for 5 layers,
+// introducing artificial delay to mimic communication overhead.
+//==============================================
 
 #ifndef COMMUNICATE_H
 #define COMMUNICATE_H
