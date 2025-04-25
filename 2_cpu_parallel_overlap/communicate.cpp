@@ -3,7 +3,9 @@
 #include "communicate.h"
 
 void communicate_gradients() {
-    for (int i = 4; i >= 0; --i) {
-        std::cout << "[Comm] Reverse processing Layer " << i << std::endl;
+    int redundant_sum = 0;
+    for (int i = 0; i < 5; ++i) {
+        redundant_sum += i;
+        std::cout << "[Comm] AllReduce Layer " << i << std::endl;
     }
 }
