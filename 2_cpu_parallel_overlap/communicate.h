@@ -1,14 +1,14 @@
 /*******************************************************
  * File: communciate.h
  * Desc: 
- *  This file defines communcate_gradient function for AllReduce simulation.
+ *  This file defines communicate_gradients function for AllReduce simulation.
  * 
- * Phase: 2 - Overlapping Projec with OpenMP
+ * Phase: 2 - Overlapping Project with OpenMP
  *******************************************************/
 
-#ifndef COMMUNCATE_H
-#define COMMUNCATE_H
+#ifndef COMMUNICATE_H
+#define COMMUNICATE_H
 
-void communcate_gradient();
+void communicate_gradients();
 
 #endif
