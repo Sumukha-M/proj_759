@@ -7,8 +7,12 @@
 __global__ void matmul_forward(float* x, float* w, float* y) {
     int idx = threadIdx.x + blockIdx.x * blockDim.x;
 
-    // Work only if thread index is within matrix row bounds
     if (idx < N) {
-        // Future matrix computation will go here
+        for (int j = 0; j < D; ++j) {
+            y[idx * D + j] = 0;
+            for (int k = 0; k < D; ++k) {
+                y[idx * D + j] += x[idx * D + k] * w[k * D + j];
+            }
+        }
     }
 }
