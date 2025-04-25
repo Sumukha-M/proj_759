@@ -3,6 +3,4 @@
 
 void fake_backward(float* grad);
 
-void useless_function(float* temp);  // Temporary extra function
-
 #endif
