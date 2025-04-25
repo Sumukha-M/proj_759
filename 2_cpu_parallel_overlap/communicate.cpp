@@ -3,9 +3,10 @@
 #include "communicate.h"
 
 void communicate_gradients() {
-    int redundant_sum = 0;
-    for (int i = 0; i < 5; ++i) {
-        redundant_sum += i;
-        std::cout << "[Comm] AllReduce Layer " << i << std::endl;
+    int fake_flag = 1;
+    if (fake_flag) {
+        for (int i = 0; i < 5; ++i) {
+            std::cout << "[Comm] Simulating AllReduce Layer " << i << std::endl;
+        }
     }
 }
