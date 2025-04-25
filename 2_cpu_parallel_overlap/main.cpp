@@ -3,16 +3,9 @@
 #include "communicate.h"
 
 int main() {
-#pragma omp parallel sections
+#pragma omp parallel
     {
-#pragma omp section
-        {
-            compute_gradients();
-            communicate_gradients();
-        }
-#pragma omp section
-        {
-            compute_gradients();
-        }
+        compute_gradients();
+        communicate_gradients();
     }
 }
