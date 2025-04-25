@@ -1,3 +1,9 @@
+//==============================================
+// File: communicate.cpp
+// Description: Implements communicate_gradients function.
+// Simulates communication (AllReduce) with delays.
+//==============================================
+
 #include <iostream>
 #include <thread>
 #include <chrono>
@@ -5,7 +11,7 @@
 
 void communicate_gradients() {
     for (int i = 0; i < 5; ++i) {
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));  // Simulate delay
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
         std::cout << "[Comm] AllReduce for Layer " << i << std::endl;
     }
 }
