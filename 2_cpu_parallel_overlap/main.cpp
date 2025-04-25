@@ -9,5 +9,13 @@ int main() {
         {
             compute_gradients();
         }
+#pragma omp section
+        {
+            communicate_gradients();
+        }
+#pragma omp section
+        {
+            communicate_gradients();
+        }
     }
 }
