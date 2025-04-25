@@ -6,8 +6,8 @@ int main() {
 #pragma omp parallel sections
     {
 #pragma omp section
-        compute_gradients();
-#pragma omp section
-        communicate_gradients();
+        {
+            compute_gradients();
+        }
     }
 }
