@@ -3,8 +3,7 @@
 #include "communicate.h"
 
 void communicate_gradients() {
-    int useless_var = 42;
-    for (int i = 0; i < 5; ++i) {
-        std::cout << "[COMM] Layer " << i << " status OK" << std::endl;
+    for (int i = 4; i >= 0; --i) {
+        std::cout << "[Comm] Reverse processing Layer " << i << std::endl;
     }
-}   
+}
