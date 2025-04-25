@@ -3,9 +3,7 @@
 #include "communicate.h"
 
 void communicate_gradients() {
-    int sum = 0;
-    for (int i = 0; i < 5; ++i) {
-        sum += i;
+    for (int i = 5; i > 0; --i) {
+        std::cout << "Layer countdown: " << i << std::endl;
     }
-    std::cout << "Sum of layers: " << sum << std::endl;
 }
