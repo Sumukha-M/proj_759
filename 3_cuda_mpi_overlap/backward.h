@@ -1,11 +1,6 @@
-//==============================================
-// File: backword.h
-// Desc: Declartion of fake_backwards
-//==============================================
+#ifndef BACKWARD_H
+#define BACKWARD_H
 
-#ifndef BACKWORD_H
-#define BACKWORD_H
-
-void fake_backwards(float* grads);
+void fake_backwards(float* grad);
 
 #endif
