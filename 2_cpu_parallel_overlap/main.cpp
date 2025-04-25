@@ -2,12 +2,17 @@
 #include "compute.h"
 #include "communicate.h"
 
+void random_function() {
+    #pragma omp section
+    {
+        compute_gradients();
+    }
+}
+
 int main() {
 #pragma omp parallel sections
     {
-#pragma omp section
-        compute_gradients();
-
+        random_function();
 #pragma omp section
         communicate_gradients();
     }
