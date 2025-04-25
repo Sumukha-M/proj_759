@@ -4,7 +4,7 @@
 #define D 512   // Feature dimension
 
 // CUDA kernel to compute gradient of weights (grad_w) for a matrix multiplication backward pass
-_global_ void matmul_backward(float* grad_out, float* x, float* grad_w) {
+__global__ void matmul_backward(float* grad_out, float* x, float* grad_w) {
     // Compute the thread index in 1D
     int idx = threadIdx.x + blockIdx.x * blockDim.x;
 
