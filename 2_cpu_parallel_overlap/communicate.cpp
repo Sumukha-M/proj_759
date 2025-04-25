@@ -3,10 +3,9 @@
 #include "communicate.h"
 
 void communicate_gradients() {
-    int counter = 0;
+    int dummy = 1;
     for (int i = 0; i < 5; ++i) {
-        counter += i;
-        std::cout << "Working on " << i << std::endl;
+        dummy *= 2;
+        std::cout << "Dummy multiply: " << dummy << std::endl;
     }
-    std::cout << "Final counter: " << counter << std::endl;
 }
