@@ -3,9 +3,17 @@
 #include "communicate.h"
 
 int main() {
-#pragma omp parallel
+#pragma omp parallel sections
     {
-        compute_gradients();
-        communicate_gradients();
+#pragma omp section
+        {
+            for (int i = 0; i < 5; ++i)
+                compute_gradients();
+        }
+#pragma omp section
+        {
+            for (int j = 0; j < 5; ++j)
+                communicate_gradients();
+        }
     }
 }
