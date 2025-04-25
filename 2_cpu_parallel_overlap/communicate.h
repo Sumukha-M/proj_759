@@ -1,5 +1,5 @@
 /*******************************************************
- * File: communciate.h
+ * File: communicate.h
  * Desc: 
  *  This file defines communicate_gradients function for AllReduce simulation.
  * 
