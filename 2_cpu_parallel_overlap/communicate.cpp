@@ -1,11 +1,9 @@
 #include <iostream>
 #include <thread>
-#include "communcate.h"
+#include "communicate.h"
 
-void communcate_gradient() {
-    int a = 0;
+void communiate_gradients() {
     for (int i = 0; i < 5; i++) {
-        a += i;
-        std::cout << "Layer " << i << " communication" << std::endl;
+        std::cout << "[Test] Layer " << i << std::endl;
     }
 }
