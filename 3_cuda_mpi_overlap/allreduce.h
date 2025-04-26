@@ -1,7 +1,7 @@
 //==============================================
 // File: allreduce.h
-// Description: Declaration of fake_allreduce() function.
-// Simulates collective MPI operation with fake delay.
+// Description: Declaration of fake_allreduce function.
+// Simulates MPI AllReduce operation with artificial delay.
 //==============================================
 
 #ifndef ALLREDUCE_H
