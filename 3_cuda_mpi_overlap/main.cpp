@@ -1,7 +1,7 @@
 #include <mpi.h>
 #include <omp.h>
 
-#include "backword.h"
+#include "backward.h"
 #include "allreduce.h"
 
 int main(int argc, char** argv) {
