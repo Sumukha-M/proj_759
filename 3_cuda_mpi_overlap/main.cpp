@@ -22,15 +22,13 @@ int main(int argc, char** argv) {
     {
 #pragma omp section
         {
-            for (int i = 0; i < 2; ++i)
-                fake_backward(grad);
-            std::cout << "[Rank " << rank << "] Backward multiple passes" << std::endl;
+            fake_backward(grad);
+            std::cout << "[Rank " << rank << "] Gradient ready" << std::endl;
         }
 #pragma omp section
         {
-            for (int j = 0; j < 2; ++j)
-                fake_allreduce(grad, rank, size);
-            std::cout << "[Rank " << rank << "] Communication multiple passes" << std::endl;
+            fake_allreduce(grad, rank, size);
+            std::cout << "[Rank " << rank << "] AllReduce complete" << std::endl;
         }
     }
 
