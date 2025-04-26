@@ -15,10 +15,12 @@ int main(int argc, char** argv) {
 #pragma omp section
         {
             fake_backward(gradient);
+            std::cout << "Backward done" << std::endl;
         }
 #pragma omp section
         {
             fake_allreduce(gradient);
+            std::cout << "AllReduce done" << std::endl;
         }
     }
 
