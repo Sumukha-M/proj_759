@@ -18,19 +18,18 @@ int main(int argc, char** argv) {
 
     float grad[D];
 
-#pragma omp parallel sections
+    #pragma omp parallel sections
     {
-#pragma omp section
+        #pragma omp section
         {
-            std::cout << "Starting computation..." << std::endl;
             fake_backward(grad);
-            std::cout << "[Rank " << rank << "] Computation complete" << std::endl;
+            std::cout << "[Rank " << rank << "] Gradient computed" << std::endl;
         }
-#pragma omp section
+        #pragma omp section
         {
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
             fake_allreduce(grad, rank, size);
-            std::cout << "[Rank " << rank << "] Communication complete" << std::endl;
+            std::cout << "[Rank " << rank << "] Gradient AllReduced" << std::endl;
         }
     }
 
