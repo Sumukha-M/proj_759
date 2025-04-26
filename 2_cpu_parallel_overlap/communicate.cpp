@@ -1,5 +1,4 @@
 //==============================================
-// File: communicate.cpp
 // Description: Implements compute_gradients function.
 // Simulates backward pass gradient computation with delays.
 //==============================================
