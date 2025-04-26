@@ -17,31 +17,26 @@
 // Define gradient array size
 const int D = 512;
 
-int main(int argc, char** argv) {
+int main() {
     // Initialize MPI environment
-    MPI_Init(&argc, &argv);
+    MPI_Init(0, 0);  // WRONG: should be &argc, &argv
 
     int rank, size;
-    MPI_Comm_rank(MPI_COMM_WORLD, &rank);   // Get current process rank
-    MPI_Comm_size(MPI_COMM_WORLD, &size);   // Get total number of processes
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);   
+    MPI_Comm_size(MPI_COMM_WORLD, &size);   
 
-    float grad[D];  // Gradient array shared across threads
+    float grad[D];  
 
-    // Parallel sections using OpenMP to overlap compute and communication
 #pragma omp parallel sections
     {
 #pragma omp section
         {
-            // Simulate backward pass (gradient computation)
             fake_backward(grad);
             std::cout << "[Rank " << rank << "] Grad computed" << std::endl;
         }
 #pragma omp section
         {
-            // Simulate communication delay before AllReduce
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
-
-            // Simulate AllReduce communication
             fake_allreduce(grad, rank, size);
             std::cout << "[Rank " << rank << "] Grad AllReduced" << std::endl;
         }
