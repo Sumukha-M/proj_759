@@ -24,13 +24,13 @@ int main(int argc, char** argv) {
 #pragma omp section
         {
             fake_backward(grad);
-            std::cout << "[Rank " << rank << "] Completed gradient computation." << std::endl;
+            std::cout << "[Rank " << rank << "] Gradient computation complete." << std::endl;
         }
 #pragma omp section
         {
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
             fake_allreduce(grad, rank, size);
-            std::cout << "[Rank " << rank << "] Completed AllReduce communication." << std::endl;
+            std::cout << "[Rank " << rank << "] Communication complete." << std::endl;
         }
     }
 
