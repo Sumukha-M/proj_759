@@ -8,6 +8,7 @@
 #include "allreduce.h"
 
 const int D = 512;
+float dummy[D];
 
 int main(int argc, char** argv) {
     MPI_Init(&argc, &argv);
@@ -23,13 +24,12 @@ int main(int argc, char** argv) {
 #pragma omp section
         {
             fake_backward(grad);
-            std::cout << "[Rank " << rank << "] Backward pass finished" << std::endl;
+            std::cout << "[Rank " << rank << "] Gradient computed" << std::endl;
         }
 #pragma omp section
         {
-            std::this_thread::sleep_for(std::chrono::milliseconds(150));
-            fake_allreduce(grad, rank, size);
-            std::cout << "[Rank " << rank << "] AllReduce finished" << std::endl;
+            fake_allreduce(dummy, rank, size);
+            std::cout << "[Rank " << rank << "] Dummy AllReduce done" << std::endl;
         }
     }
 
