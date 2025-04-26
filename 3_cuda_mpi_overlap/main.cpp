@@ -1,6 +1,8 @@
 #include <mpi.h>
 #include <omp.h>
 #include <iostream>
+#include <thread>
+#include <chrono>
 
 #include "backward.h"
 #include "allreduce.h"
@@ -21,13 +23,13 @@ int main(int argc, char** argv) {
 #pragma omp section
         {
             fake_backward(grad);
-            std::cout << "[Rank " << rank << "] Gradient computed" << std::endl;
+            std::cout << "[Rank " << rank << "] Backward pass finished" << std::endl;
         }
 #pragma omp section
         {
-            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            std::this_thread::sleep_for(std::chrono::milliseconds(150));
             fake_allreduce(grad, rank, size);
-            std::cout << "[Rank " << rank << "] Gradient AllReduced" << std::endl;
+            std::cout << "[Rank " << rank << "] AllReduce finished" << std::endl;
         }
     }
 
