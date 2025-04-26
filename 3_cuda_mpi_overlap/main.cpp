@@ -6,7 +6,7 @@
 #include "allreduce.h"
 
 int main(int argc, char** argv) {
-    MPI_Init(argc, argv);
+    MPI_Init(&argc, &argv);
 
     float gradient[512];
 
@@ -15,12 +15,12 @@ int main(int argc, char** argv) {
 #pragma omp section
         {
             fake_backward(gradient);
-            std::cout << "Backward done" << std::endl;
+            std::cout << "Backward completed" << std::endl;
         }
 #pragma omp section
         {
-            fake_allreduce(gradient);
-            std::cout << "AllReduce done" << std::endl;
+            fake_allreduce(gradient, 0, 1);
+            std::cout << "AllReduce completed" << std::endl;
         }
     }
 
