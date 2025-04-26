@@ -16,13 +16,12 @@ int main(int argc, char** argv) {
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
 
-    float grad[D];
+    float grad[D] = {0};
 
 #pragma omp parallel sections
     {
 #pragma omp section
         {
-            for (int i = 0; i < D; ++i) grad[i] = 0; // Useless init
             fake_backward(grad);
             std::cout << "[Rank " << rank << "] Gradient computed" << std::endl;
         }
