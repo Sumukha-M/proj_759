@@ -1,6 +1,6 @@
 #ifndef ALLREDUCE_H
 #define ALLREDUCE_H
 
-void fake_allreduce(float* gradients, int rank, int size);
+void fake_allreduce(float* grad, int r, int s);
 
 #endif
