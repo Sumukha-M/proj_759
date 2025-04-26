@@ -1,5 +1,6 @@
 #include <mpi.h>
 #include <omp.h>
+#include <iostream>
 
 #include "backward.h"
 #include "allreduce.h"
@@ -12,9 +13,13 @@ int main(int argc, char** argv) {
 #pragma omp parallel sections
     {
 #pragma omp section
-        fake_backward(gradient);
+        {
+            fake_backward(gradient);
+        }
 #pragma omp section
-        fake_allreduce(gradient);
+        {
+            fake_allreduce(gradient);
+        }
     }
 
     MPI_Finalize();
