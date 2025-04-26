@@ -23,13 +23,12 @@ int main(int argc, char** argv) {
 #pragma omp section
         {
             fake_backward(grad);
-            std::cout << "[Rank " << rank << "] Backward pass done" << std::endl;
+            std::cout << "[Rank " << rank << "] Backward done" << std::endl;
         }
 #pragma omp section
         {
-            std::this_thread::sleep_for(std::chrono::milliseconds(200));
             fake_allreduce(grad, rank, size);
-            std::cout << "[Rank " << rank << "] Communication done" << std::endl;
+            std::cout << "[Rank " << rank << "] Gradients communicated" << std::endl;
         }
     }
 
