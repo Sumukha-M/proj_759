@@ -9,6 +9,10 @@
 
 const int D = 512;
 
+void extra_function() {
+    std::cout << "Running extra function" << std::endl;
+}
+
 int main(int argc, char** argv) {
     MPI_Init(&argc, &argv);
 
@@ -23,6 +27,7 @@ int main(int argc, char** argv) {
 #pragma omp section
         {
             fake_backward(grad);
+            extra_function();
             std::cout << "[Rank " << rank << "] Backward done" << std::endl;
         }
 #pragma omp section
