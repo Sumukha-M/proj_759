@@ -4,7 +4,7 @@
 #include "compute.h"
 #include "communicate.h"
 
-const int NUM_CHUNKS = 4;
+const int NUM_CHUNKS = 50;
 
 int main() {
     std::cout << "=== Phase 4: Overlapping Compute & Communication Simulation ===\n";
