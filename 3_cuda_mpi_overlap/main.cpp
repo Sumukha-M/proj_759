@@ -10,6 +10,10 @@ const int D = 512;
 int main(int argc, char** argv) {
     MPI_Init(&argc, &argv);
 
+    int rank, size;
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &size);
+
     float grad[D];
 
 #pragma omp parallel sections
@@ -17,12 +21,12 @@ int main(int argc, char** argv) {
 #pragma omp section
         {
             fake_backward(grad);
-            std::cout << "Backward completed" << std::endl;
+            std::cout << "[Rank " << rank << "] Backward pass done." << std::endl;
         }
 #pragma omp section
         {
-            fake_allreduce(grad, 0, 1);
-            std::cout << "AllReduce completed" << std::endl;
+            fake_allreduce(grad, rank, size);
+            std::cout << "[Rank " << rank << "] AllReduce done." << std::endl;
         }
     }
 
