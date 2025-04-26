@@ -1,0 +1,3 @@
+nmake
+phase4_overlap_sim
+nmake clean
