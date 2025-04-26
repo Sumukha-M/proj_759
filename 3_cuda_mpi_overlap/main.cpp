@@ -9,6 +9,10 @@
 
 const int D = 512;
 
+void simulate_delay() {
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+}
+
 int main(int argc, char** argv) {
     MPI_Init(&argc, &argv);
 
@@ -27,7 +31,7 @@ int main(int argc, char** argv) {
         }
         #pragma omp section
         {
-            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            simulate_delay();
             fake_allreduce(grad, rank, size);
             std::cout << "[Rank " << rank << "] Gradient AllReduced" << std::endl;
         }
