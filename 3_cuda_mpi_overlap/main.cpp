@@ -9,9 +9,11 @@ int main(int argc, char** argv) {
 
     float gradient[512];
 
-#pragma omp parallel
+#pragma omp parallel sections
     {
+#pragma omp section
         fake_backward(gradient);
+#pragma omp section
         fake_allreduce(gradient);
     }
 
