@@ -1,7 +1,7 @@
 #include <iostream>
 
-void compute_gradients() {   // fix function name
+void compute_gradients() {
     for (int i = 0; i < 5; ++i) {
-        std::cout << "Computing Layer\n"; 
+        std::cout << "[GradCompute] Layer " << i << std::endl;   // added layer number
     }
 }
