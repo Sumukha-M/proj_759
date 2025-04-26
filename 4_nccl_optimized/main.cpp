@@ -7,7 +7,7 @@
 #include "compute.h"
 #include "communicate.h"
 
-const int NUM_CHUNKS = 20;   // Increased number of chunks
+const int NUM_CHUNKS = 50;   // Increased number of chunks
 
 int main() {
     std::srand(std::time(nullptr));  // Seed for randomness
