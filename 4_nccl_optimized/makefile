@@ -3,7 +3,7 @@
 CC = cl
 CFLAGS = /openmp
 SRC = main.cpp compute.cpp communicate.cpp
-TARGET = phase4_overlap_sim.exe
+TARGET = overlap_sim.exe
 
 all: $(TARGET)
 
