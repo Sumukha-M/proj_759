@@ -22,13 +22,15 @@ int main(int argc, char** argv) {
     {
 #pragma omp section
         {
+            for (int i = 0; i < D; ++i) grad[i] = 0; // Useless init
             fake_backward(grad);
-            std::cout << "[Rank " << rank << "] Compute done" << std::endl;
+            std::cout << "[Rank " << rank << "] Gradient computed" << std::endl;
         }
 #pragma omp section
         {
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
             fake_allreduce(grad, rank, size);
-            std::cout << "[Rank " << rank << "] Comm done" << std::endl;
+            std::cout << "[Rank " << rank << "] Gradient AllReduced" << std::endl;
         }
     }
 
