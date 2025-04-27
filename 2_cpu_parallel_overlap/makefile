@@ -28,23 +28,32 @@
 
 # NMake Makefile for cpu_parallel_overlap: Auto-Build, Run, and Log Timings
 
+# Declare phony targets to avoid conflicts
+.PHONY: all clean run_timings
+
+# Compiler and Flags
 CC = cl
 CFLAGS = /openmp
 
+# Common Source Files
 SRC_COMMON = compute.cpp communicate.cpp
 
+# Executable Names
 OVERLAP_TARGET = cpu_overlap.exe
 SEQUENTIAL_TARGET = cpu_sequential.exe
 
+# Default Target: Build Both and Run Timings
 all: $(OVERLAP_TARGET) $(SEQUENTIAL_TARGET) run_timings
 
+# Build Overlapped Execution
 $(OVERLAP_TARGET):
 	$(CC) $(CFLAGS) main_overlap.cpp $(SRC_COMMON) /Fe:$(OVERLAP_TARGET)
 
+# Build Sequential Execution
 $(SEQUENTIAL_TARGET):
 	$(CC) main_sequential.cpp $(SRC_COMMON) /Fe:$(SEQUENTIAL_TARGET)
 
-# Run both executables and store timings
+# Run Both Executables and Log Timings
 run_timings:
 	@echo Running Sequential Version... > timing_results.txt
 	@$(SEQUENTIAL_TARGET) >> timing_results.txt
@@ -52,5 +61,6 @@ run_timings:
 	@$(OVERLAP_TARGET) >> timing_results.txt
 	@echo Timings logged in timing_results.txt
 
+# Clean Target
 clean:
 	del $(OVERLAP_TARGET) $(SEQUENTIAL_TARGET) timing_results.txt
