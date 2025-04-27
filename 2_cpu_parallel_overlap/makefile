@@ -1,23 +1,56 @@
-# NMake Makefile for Phase 2: OpenMP Overlap Modular Project
+# # NMake Makefile for Phase 2: OpenMP Overlap Modular Project
 
-# Compiler
+# # Compiler
+# CC = cl
+
+# # Compiler Flags
+# CFLAGS = /openmp
+
+# # Source Files
+# SRC = main.cpp compute.cpp communicate.cpp
+
+# # Output Executable
+# TARGET = openmp_overlap_modular.exe
+
+# # Default Target
+# all: $(TARGET)
+
+# $(TARGET):
+# 	$(CC) $(CFLAGS) $(SRC) /Fe:$(TARGET)
+
+# # Clean Target
+# clean:
+# 	del $(TARGET)
+
+
+
+
+
+# NMake Makefile for cpu_parallel_overlap: Auto-Build, Run, and Log Timings
+
 CC = cl
-
-# Compiler Flags
 CFLAGS = /openmp
 
-# Source Files
-SRC = main.cpp compute.cpp communicate.cpp
+SRC_COMMON = compute.cpp communicate.cpp
 
-# Output Executable
-TARGET = openmp_overlap_modular.exe
+OVERLAP_TARGET = cpu_overlap.exe
+SEQUENTIAL_TARGET = cpu_sequential.exe
 
-# Default Target
-all: $(TARGET)
+all: $(OVERLAP_TARGET) $(SEQUENTIAL_TARGET) run_timings
 
-$(TARGET):
-	$(CC) $(CFLAGS) $(SRC) /Fe:$(TARGET)
+$(OVERLAP_TARGET):
+	$(CC) $(CFLAGS) main_overlap.cpp $(SRC_COMMON) /Fe:$(OVERLAP_TARGET)
 
-# Clean Target
+$(SEQUENTIAL_TARGET):
+	$(CC) main_sequential.cpp $(SRC_COMMON) /Fe:$(SEQUENTIAL_TARGET)
+
+# Run both executables and store timings
+run_timings:
+	@echo Running Sequential Version... > timing_results.txt
+	@$(SEQUENTIAL_TARGET) >> timing_results.txt
+	@echo Running Overlap Version... >> timing_results.txt
+	@$(OVERLAP_TARGET) >> timing_results.txt
+	@echo Timings logged in timing_results.txt
+
 clean:
-	del $(TARGET)
+	del $(OVERLAP_TARGET) $(SEQUENTIAL_TARGET) timing_results.txt
